@@ -1,4 +1,4 @@
-Common tree for Oppo MSM8974-based devices
+AOSP device tree for OnePlus One
 
-Copyright 2014, The CyanogenMod Project
+Copyright 2015, The CyanogenMod Project, AOneSPlus
 

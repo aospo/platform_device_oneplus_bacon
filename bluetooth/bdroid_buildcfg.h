@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 The CyanogenMod Project, AOneSPlus
+ * Copyright (C) 2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-#ifndef DEVICE_PERMS_H
-#define DEVICE_PERMS_H
+#ifndef _BDROID_BUILDCFG_H
+#define _BDROID_BUILDCFG_H
 
-#define PROPERTY_PERMS_APPEND \
-    { "persist.audio.",   AID_SYSTEM,   0 }, \
-    { "persist.sys.camera.", AID_MEDIA, 0 }, \
-    { "camera.", AID_MEDIA, 0 }, \
-    { "sys.media.", AID_MEDIA, 0 },
-#endif /* DEVICE_PERMS_H */
+#define BLUETOOTH_QTI_SW TRUE
+
+#define BTM_DEF_LOCAL_NAME   "OnePlus One"
+#define MAX_ACL_CONNECTIONS 7
+#define MAX_L2CAP_CHANNELS  16
+
+#define BTA_SKIP_BLE_READ_REMOTE_FEAT FALSE
+#define BTA_BLE_SKIP_CONN_UPD  FALSE
+
+#define BLE_VND_INCLUDED   TRUE
+#define BLE_PERIPHERAL_ADV_NAME  TRUE
+
+#endif

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 The CyanogenMod Project
+# Copyright (C) 2015 The CyanogenMod Project, AOneSPlus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,9 +15,6 @@
 #
 
 LOCAL_PATH := $(call my-dir)
-
-ifeq ($(BOARD_VENDOR),oppo)
-ifeq ($(TARGET_BOARD_PLATFORM),msm8974)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
@@ -174,6 +171,3 @@ $(shell mkdir -p $(TARGET_OUT)/etc/firmware/wcd9320; \
 $(shell mkdir -p $(TARGET_OUT)/etc/firmware/wlan/prima; \
     ln -sf /data/misc/wifi/WCNSS_qcom_cfg.ini \
 	    $(TARGET_OUT)/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini)
-
-endif
-endif

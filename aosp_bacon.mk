@@ -1,4 +1,5 @@
-# Copyright (C) 2013 The CyanogenMod Project
+#
+# Copyright 2015 AOneSPlus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,17 +12,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+$(call inherit-product, device/oneplus/bacon/full_bacon.mk)
 
-LOCAL_PATH:= $(call my-dir)
-# HAL module implemenation stored in
-# hw/<COPYPIX_HARDWARE_MODULE_ID>.<ro.board.platform>.so
-include $(CLEAR_VARS)
+PRODUCT_NAME := aosp_bacon
 
-LOCAL_SRC_FILES := lights.c
-LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
-LOCAL_SHARED_LIBRARIES := liblog libcutils
-
-LOCAL_MODULE := lights.bacon
-LOCAL_MODULE_TAGS := optional
-
-include $(BUILD_SHARED_LIBRARY)
+PRODUCT_PACKAGES += \
+    Launcher3

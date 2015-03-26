@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 The CyanogenMod Project
+# Copyright (C) 2015 The CyanogenMod Project, AOneSPlus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
 # limitations under the License.
 #
 
-# inherit from Oppo common
--include device/oppo/common/BoardConfigCommon.mk
-
 # Include path
-TARGET_SPECIFIC_HEADER_PATH := device/oppo/msm8974-common/include
+TARGET_SPECIFIC_HEADER_PATH := device/oneplus/bacon/include
+
+# Board
+BOARD_VENDOR := oppo
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := MSM8974
@@ -35,24 +35,32 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := krait
-#TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
+
+# Dex
+ifeq ($(HOST_OS),linux)
+  ifeq ($(TARGET_BUILD_VARIANT),user)
+    ifeq ($(WITH_DEXPREOPT),)
+      WITH_DEXPREOPT := true
+    endif
+  endif
+endif
+DONT_DEXPREOPT_PREBUILTS := true
 
 # Assertions
-TARGET_BOARD_INFO_FILE ?= device/oppo/msm8974-common/board-info.txt
+TARGET_BOARD_INFO_FILE ?= device/oneplus/bacon/board-info.txt
 
 # Kernel
-BOARD_CUSTOM_BOOTIMG_MK := device/oppo/msm8974-common/mkbootimg.mk
+BOARD_CUSTOM_BOOTIMG_MK := device/oneplus/bacon/mkbootimg.mk
 BOARD_KERNEL_BASE := 0x00000000
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=bacon user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_SEPARATED_DT := true
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --tags_offset 0x01e00000
 TARGET_KERNEL_SOURCE := kernel/oneplus/msm8974
 TARGET_KERNEL_ARCH := arm
+TARGET_KERNEL_CONFIG := cyanogenmod_bacon_defconfig
 
-# Enable DIAG on debug builds
-ifneq ($(TARGET_BUILD_TYPE),user)
-TARGET_KERNEL_ADDITIONAL_CONFIG:= cyanogenmod_debug_config
-endif
+TARGET_INIT_VENDOR_LIB := libinit_bacon
 
 # Flags
 COMMON_GLOBAL_CFLAGS += -DNO_SECURE_DISCARD
@@ -64,21 +72,25 @@ BOARD_USES_QCOM_HARDWARE := true
 BOARD_USES_ALSA_AUDIO := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 AUDIO_FEATURE_ENABLED_HWDEP_CAL := true
+AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
+AUDIO_FEATURE_ENABLED_LOW_LATENCY_CAPTURE := true
 
 # Bluetooth
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 QCOM_BT_USE_SMD_TTY := true
 BLUETOOTH_HCI_USE_MCT := true
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/oneplus/bacon/bluetooth
+
+# Camera
+USE_DEVICE_SPECIFIC_CAMERA := true
+COMMON_GLOBAL_CFLAGS += -DOPPO_CAMERA_HARDWARE
 
 # Charger
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 
-# CM Hardware
-BOARD_HARDWARE_CLASS += device/oppo/msm8974-common/cmhw
-
 # Graphics
-BOARD_EGL_CFG := device/oppo/msm8974-common/configs/egl.cfg
+BOARD_EGL_CFG := device/oneplus/bacon/configs/egl.cfg
 USE_OPENGL_RENDERER := true
 TARGET_CONTINUOUS_SPLASH_ENABLED := true
 TARGET_USES_C2D_COMPOSITION := true
@@ -101,6 +113,9 @@ MAX_EGL_CACHE_SIZE := 2048*1024
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 
+# NFC
+BOARD_NFC_CHIPSET := pn547
+
 # Wifi
 BOARD_HAS_QCOM_WLAN              := true
 BOARD_HAS_QCOM_WLAN_SDK          := true
@@ -115,25 +130,40 @@ WIFI_DRIVER_FW_PATH_AP           := "ap"
 TARGET_USES_WCNSS_CTRL           := true
 TARGET_USES_QCOM_WCNSS_QMI       := true
 TARGET_USES_WCNSS_MAC_ADDR_REV   := true
+TARGET_WCNSS_MAC_PREFIX 	 := e8bba8
 
 # Filesystem
 TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_PERSISTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_BOOTIMAGE_PARTITION_SIZE     := 16777216
+BOARD_CACHEIMAGE_PARTITION_SIZE    := 536870912
 BOARD_FLASH_BLOCK_SIZE := 131072
+BOARD_PERSISTIMAGE_PARTITION_SIZE  := 33554432
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16777216
+BOARD_SYSTEMIMAGE_PARTITION_SIZE   := 1388314624
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 13271448576
+BOARD_USERDATAEXTRAIMAGE_PARTITION_SIZE := 59914792960
+BOARD_USERDATAEXTRAIMAGE_PARTITION_NAME := 64G
 
 # No old RPC for prop
 TARGET_NO_RPC := true
 
 # GPS HAL lives here
-TARGET_GPS_HAL_PATH := device/oppo/msm8974-common/gps
+TARGET_GPS_HAL_PATH := device/oneplus/bacon/gps
 TARGET_PROVIDES_GPS_LOC_API := true
+
+# QCOM Power
+TARGET_POWERHAL_VARIANT := qcom
 
 # QCRIL
 TARGET_RIL_VARIANT := caf
 
 # Use HW crypto for ODE
 TARGET_HW_DISK_ENCRYPTION := true
+
+# Workaround for factory issue
+BOARD_VOLD_CRYPTFS_MIGRATE := true
 
 # Added to indicate that protobuf-c is supported in this build
 PROTOBUF_SUPPORTED := true
@@ -143,6 +173,14 @@ BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
+
+# MSM Init
+TARGET_INIT_VENDOR_LIB := libinit_msm_oppo
+
+# Recovery
+TARGET_RECOVERY_FSTAB := device/oneplus/bacon/rootdir/etc/fstab.bacon
+TARGET_OTA_ASSERT_DEVICE := bacon,A0001
+TARGET_RELEASETOOLS_EXTENSIONS := device/oneplus/bacon
 
 # inherit from the proprietary version
 ifneq ($(QCPATH),)
@@ -158,6 +196,6 @@ endif
 include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += \
-        device/oppo/msm8974-common/sepolicy
+        device/oneplus/bacon/sepolicy
 
--include vendor/oppo/msm8974-common/BoardConfigVendor.mk
+-include vendor/oneplus/bacon/BoardConfigVendor.mk
